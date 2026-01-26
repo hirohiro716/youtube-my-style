@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Youtube My Style
 // @namespace    https://github.com/hirohiro716/
-// @version      1.1
+// @version      1.2
 // @description  Fix Youtube styles.
 // @author       hiro
 // @match        https://www.youtube.com/*
@@ -23,9 +23,11 @@ let fixNarrowHeader = function() {
     if (window.innerWidth < 800 && window.scrollY === 0) {
         container.style.display = "none";
         pageManager.style.setProperty("--ytd-toolbar-height", "0");
+        pageManager.style.setProperty("--ytd-masthead-height", "0");
     } else {
         container.style.display = "";
         pageManager.style.setProperty("--ytd-toolbar-height", "");
+        pageManager.style.setProperty("--ytd-masthead-height", "");
     }
 };
 setInterval(fixNarrowHeader, 500);
