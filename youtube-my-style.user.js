@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Youtube My Style
 // @namespace    https://github.com/hirohiro716/
-// @version      1.2
+// @version      2.0
 // @description  Fix Youtube styles.
 // @author       hiro
 // @match        https://www.youtube.com/*
@@ -11,7 +11,7 @@
 // @downloadURL  https://github.com/hirohiro716/youtube-my-style/raw/main/youtube-my-style.user.js
 // ==/UserScript==
 
-let fixNarrowHeader = function() {
+let fixNarrowHeader = () => {
     if (window.location.href.indexOf("/watch?") === -1) {
         return;
     }
@@ -32,3 +32,77 @@ let fixNarrowHeader = function() {
 };
 setInterval(fixNarrowHeader, 500);
 
+let tryClickSkipButton = () => {
+    const isElementVisible = (element) => {
+        const rect = element.getBoundingClientRect();
+        const style = window.getComputedStyle(element);
+        return (rect.width > 0 && rect.height > 0 && style.visibility !== "hidden" && style.display !== "none" && style.opacity !== "0");
+    };
+    const selectors = [
+        '.ytp-skip-ad-button',
+        '.ytp-ad-skip-button',
+        '.ytp-ad-skip-button-modern',
+        '.ytp-ad-skip-button-slot',
+        'button[class*="skip"]',
+        'div[class*="skip"]',
+        '[id*="skip-button"]'
+    ];
+    for (const element of Array.from(document.querySelectorAll(selectors.join(",")))) {
+        if (isElementVisible(element)) {
+            for (const eventName of ["pointerdown", "mousedown", "pointerup", "mouseup", "click"]) {
+                const isPointer = eventName.startsWith("pointer");
+                const EventClass = isPointer ? PointerEvent : MouseEvent;
+                const event = new EventClass(eventName, {
+                    bubbles: true,
+                    cancelable: true,
+                    view: window,
+                    pointerId: 1,
+                    isPrimary: true
+                });
+                element.dispatchEvent(event);
+            }
+            if (typeof element.click === "function") {
+                element.click();
+            }
+            break;
+        }
+    }
+}
+setInterval(tryClickSkipButton, 1000);
+
+let muteAds = async () => {
+    const video = document.querySelector("video");
+    if (video) {
+        const adContainer = document.querySelector(".ad-showing");
+        if (adContainer) {
+            video.muted = true;
+        } else {
+            video.muted = false;
+            video.playbackRate = 1.0;
+        }
+    }
+}
+setInterval(muteAds, 1000);
+
+let working = false;
+let processAds = async () => {
+    if (working) {
+        return;
+    }
+    working = true;
+    const video = document.querySelector("video");
+    if (video) {
+        const adContainer = document.querySelector(".ad-showing");
+        if (adContainer) {
+            await new Promise((resolve) => { setTimeout(() => resolve(), 5000) });
+            if (document.querySelector(".ad-showing") !== null) {
+                video.playbackRate = 16.0;
+                if (isFinite(video.duration) && video.duration > 0) {
+                    video.currentTime = video.duration;
+                }
+            }
+        }
+    }
+    working = false;
+}
+setInterval(processAds, 1000);
