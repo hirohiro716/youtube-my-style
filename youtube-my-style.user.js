@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Youtube My Style
 // @namespace    https://github.com/hirohiro716/
-// @version      2.1
+// @version      2.2
 // @description  Fix Youtube styles.
 // @author       hiro
 // @match        https://www.youtube.com/*
@@ -49,6 +49,7 @@ let tryClickSkipButton = () => {
     ];
     for (const element of Array.from(document.querySelectorAll(selectors.join(",")))) {
         if (isElementVisible(element)) {
+            element.click();
             for (const eventName of ["pointerdown", "mousedown", "pointerup", "mouseup", "click"]) {
                 const isPointer = eventName.startsWith("pointer");
                 const EventClass = isPointer ? PointerEvent : MouseEvent;
@@ -60,9 +61,6 @@ let tryClickSkipButton = () => {
                     isPrimary: true
                 });
                 element.dispatchEvent(event);
-            }
-            if (typeof element.click === "function") {
-                element.click();
             }
             break;
         }
