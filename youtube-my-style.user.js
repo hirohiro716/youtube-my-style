@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Youtube My Style
 // @namespace    https://github.com/hirohiro716/
-// @version      2.2
+// @version      2.2.1
 // @description  Fix Youtube styles.
 // @author       hiro
 // @match        https://www.youtube.com/*
@@ -80,7 +80,7 @@ let muteAds = async () => {
         }
     }
 }
-setInterval(muteAds, 500);
+setInterval(muteAds, 200);
 
 let working = false;
 let processAds = async () => {
