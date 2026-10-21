@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Youtube My Style
 // @namespace    https://github.com/hirohiro716/
-// @version      2.2.1
+// @version      2.2.2
 // @description  Fix Youtube styles.
 // @author       hiro
 // @match        https://www.youtube.com/*
@@ -92,9 +92,9 @@ let processAds = async () => {
     if (video) {
         const adContainer = document.querySelector(".ad-showing");
         if (adContainer) {
-            await new Promise((resolve) => { setTimeout(() => resolve(), 5000) });
+            await new Promise((resolve) => { setTimeout(() => resolve(), 7000) });
             if (document.querySelector(".ad-showing") !== null) {
-                video.playbackRate = 16.0;
+                // video.playbackRate = 16.0;
                 if (isFinite(video.duration) && video.duration > 0) {
                     video.currentTime = video.duration;
                 }
