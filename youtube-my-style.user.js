@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Youtube My Style
 // @namespace    https://github.com/hirohiro716/
-// @version      2.2.2
+// @version      2.3.0
 // @description  Fix Youtube styles.
 // @author       hiro
 // @match        https://www.youtube.com/*
@@ -32,55 +32,55 @@ let fixNarrowHeader = () => {
 };
 setInterval(fixNarrowHeader, 500);
 
-let tryClickSkipButton = () => {
-    const isElementVisible = (element) => {
-        const rect = element.getBoundingClientRect();
-        const style = window.getComputedStyle(element);
-        return (rect.width > 0 && rect.height > 0 && style.visibility !== "hidden" && style.display !== "none" && style.opacity !== "0");
-    };
-    const selectors = [
-        '.ytp-skip-ad-button',
-        '.ytp-ad-skip-button',
-        '.ytp-ad-skip-button-modern',
-        '.ytp-ad-skip-button-slot',
-        'button[class*="skip"]',
-        'div[class*="skip"]',
-        '[id*="skip-button"]'
-    ];
-    for (const element of Array.from(document.querySelectorAll(selectors.join(",")))) {
-        if (isElementVisible(element)) {
-            element.click();
-            for (const eventName of ["pointerdown", "mousedown", "pointerup", "mouseup", "click"]) {
-                const isPointer = eventName.startsWith("pointer");
-                const EventClass = isPointer ? PointerEvent : MouseEvent;
-                const event = new EventClass(eventName, {
-                    bubbles: true,
-                    cancelable: true,
-                    view: window,
-                    pointerId: 1,
-                    isPrimary: true
-                });
-                element.dispatchEvent(event);
-            }
-            break;
-        }
-    }
-}
-setInterval(tryClickSkipButton, 1000);
+//let tryClickSkipButton = () => {
+//    const isElementVisible = (element) => {
+//        const rect = element.getBoundingClientRect();
+//        const style = window.getComputedStyle(element);
+//        return (rect.width > 0 && rect.height > 0 && style.visibility !== "hidden" && style.display !== "none" && style.opacity !== "0");
+//    };
+//    const selectors = [
+//        '.ytp-skip-ad-button',
+//        '.ytp-ad-skip-button',
+//        '.ytp-ad-skip-button-modern',
+//        '.ytp-ad-skip-button-slot',
+//        'button[class*="skip"]',
+//        'div[class*="skip"]',
+//        '[id*="skip-button"]'
+//    ];
+//    for (const element of Array.from(document.querySelectorAll(selectors.join(",")))) {
+//        if (isElementVisible(element)) {
+//            element.click();
+//            for (const eventName of ["pointerdown", "mousedown", "pointerup", "mouseup", "click"]) {
+//                const isPointer = eventName.startsWith("pointer");
+//                const EventClass = isPointer ? PointerEvent : MouseEvent;
+//                const event = new EventClass(eventName, {
+//                    bubbles: true,
+//                    cancelable: true,
+//                    view: window,
+//                    pointerId: 1,
+//                    isPrimary: true
+//                });
+//                element.dispatchEvent(event);
+//            }
+//            break;
+//        }
+//    }
+//}
+//setInterval(tryClickSkipButton, 1000);
 
-let muteAds = async () => {
-    const video = document.querySelector("video");
-    if (video) {
-        const adContainer = document.querySelector(".ad-showing");
-        if (adContainer) {
-            video.muted = true;
-        } else {
-            video.muted = false;
-            video.playbackRate = 1.0;
-        }
-    }
-}
-setInterval(muteAds, 200);
+//let muteAds = async () => {
+//    const video = document.querySelector("video");
+//    if (video) {
+//        const adContainer = document.querySelector(".ad-showing");
+//        if (adContainer) {
+//            video.muted = true;
+//        } else {
+//            video.muted = false;
+//            video.playbackRate = 1.0;
+//        }
+//    }
+//}
+//setInterval(muteAds, 200);
 
 let working = false;
 let processAds = async () => {
@@ -92,7 +92,7 @@ let processAds = async () => {
     if (video) {
         const adContainer = document.querySelector(".ad-showing");
         if (adContainer) {
-            await new Promise((resolve) => { setTimeout(() => resolve(), 7000) });
+            await new Promise((resolve) => { setTimeout(() => resolve(), 6000) });
             if (document.querySelector(".ad-showing") !== null) {
                 // video.playbackRate = 16.0;
                 if (isFinite(video.duration) && video.duration > 0) {
